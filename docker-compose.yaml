@@ -1,0 +1,45 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  data-generator:
+    build: ./init_data
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - USER_COUNT=100
+      - DB_NAME=user_data_db
+      - COLLECTION_NAME=users
+
+  embedding-service:
+    build: ./create_embedding
+    depends_on:
+      - mongodb
+      - data-generator
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - DB_NAME=user_data_db
+      - COLLECTION_NAME=users
+
+  agent-service:
+    build: ./agents
+    depends_on:
+      - mongodb
+      - embedding-service
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - DB_NAME=user_data_db
+      - COLLECTION_NAME=users
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - QUERY=Find users similar to a female from Tokyo staying for short duration?
+      - MODEL_NAME=llama3.2:1b
+
+volumes:
+  mongodb_data:
