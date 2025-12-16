@@ -1,4 +1,4 @@
-# MongoDB User Analysis & RAG Agent
+# User Analysis & RAG Agent
 
 This project demonstrates a full data pipeline and intelligent agent system using **MongoDB**, **Docker**, **Sentence Transformers**, and **Ollama (LLM)**.
 
