@@ -41,5 +41,20 @@ services:
       - QUERY=Find users similar to a female from Tokyo staying for short duration?
       - MODEL_NAME=llama3.2:1b
 
+  evaluation-service:
+    build: ./evaluation
+    depends_on:
+      - mongodb
+      - embedding-service
+      - agent-service
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - DB_NAME=user_data_db
+      - COLLECTION_NAME=users
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - MODEL_NAME=llama3.2:1b
+
 volumes:
   mongodb_data:

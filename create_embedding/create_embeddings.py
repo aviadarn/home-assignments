@@ -24,7 +24,7 @@ def main():
         model = SentenceTransformer('all-MiniLM-L6-v2')
         print("Model loaded.")
 
-        users = list(collection.find({"location_embedding": {"$exists": False}}))
+        users = list(collection.find({"identity_embedding": {"$exists": False}}))
         print(f"Found {len(users)} users needing embeddings.")
 
         if not users:
@@ -39,7 +39,7 @@ def main():
             gender = user.get("gender") 
             duration = user.get("duration")
             if location:
-                identity_embedding = model.encode(f"{age} {gender} {duration}")
+                identity_embedding = model.encode(f"{age} {gender} {duration} {home_location} {location}")
                 collection.update_one(
                     {"_id": user["_id"]},
                     {"$set": {
