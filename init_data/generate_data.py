@@ -71,7 +71,7 @@ def main():
         client.admin.command('ping')
         print("Connected to MongoDB successfully.")
 
-        if data_buffer:
+        if data_buffer and collection.count_documents({}) <= count:
             result = collection.insert_many(data_buffer)
             print(f"Successfully inserted {len(result.inserted_ids)} documents.")
         else:

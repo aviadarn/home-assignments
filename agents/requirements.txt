@@ -4,3 +4,4 @@ langchain-ollama
 pymongo
 sentence-transformers
 numpy
+streamlit

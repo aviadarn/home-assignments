@@ -31,6 +31,8 @@ services:
     depends_on:
       - mongodb
       - embedding-service
+    ports:
+      - "8501:8501"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
